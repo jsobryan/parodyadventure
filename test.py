@@ -35,16 +35,15 @@ enemy.weaknesses = "Flail"
 enemy.resistances = "Cower"
 
 #game mechanics
+class Encounter:
+    def __init__(self,encounternum):
+        self.encounternum = encounternum
+        self.encountertext = []
+        nextencounter = encounternum + 1
+        prevencounter = encounternum - 1
 
 def yourchoice():
-    int(input("Your choice: "))
-
-#logic for progressing / reverting
-def prevencounter():
-    pass 
-
-def nextencounter():
-    pass
+    return int(input("Your choice: "))
 
 #random logic for skill text goes here
 def flail():
@@ -58,7 +57,7 @@ def flail():
 #
 
 #game encounters
-def encounter1():
+e1 = Encounter(1)
     print(f'''
     Walking down the path, you see a large gray donkey in the middle of the road.  It doesn't appear to be interested in moving any time soon.
 
@@ -75,12 +74,11 @@ def encounter1():
             print('You wait for several hours in the bug-infested reeds.  The donkey does not move')
             continue
         elif choice == 3:
-            print('{flail}.  It looks at you with what appears to be confusion and slowly saunters down the road')
+            print(f'{flail()}.  It looks at you with what appears to be confusion and slowly saunters down the road')
             nextencounter()
 
 #testing
-print(flail())
-
+encounter1()
 
 
 
