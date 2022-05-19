@@ -1,6 +1,7 @@
 import random
 import os
 
+#player / enemy stats
 class Player:
     def __init__(self,name,hp):
         self.name = name
@@ -14,7 +15,8 @@ class Enemy:
         self.name = name
         self.resistances = []
         self.weaknesses = []
-        
+
+#skills.  Need to add player choice logic
 skill_list = [
     "Hide",
     "Flee",
@@ -25,18 +27,37 @@ skill_list = [
     "Flail",
 ]
 
+#example encounter stats
 p1 = Player("Florbert The Unseemly",20)
 p1.skills = ["Hide","Cower","Disgust"]
-enemy1 = Enemy("Annoyed Donkey")
-enemy1.weaknesses = "Flail"
+enemy = Enemy("Annoyed Donkey")
+enemy.weaknesses = "Flail"
+enemy.resistances = "Cower"
+
+#game mechanics
 
 def yourchoice():
     int(input("Your choice: "))
 
+#logic for progressing / reverting
 def prevencounter():
-    return 
+    pass 
 
+def nextencounter():
+    pass
 
+#random logic for skill text goes here
+def flail():
+    flail_text = [
+        "You hammer your fists wildly at the ",
+        "You let loose an anguished cry and flail at the ",
+        "You raise your hands above your head in a threatening gesture and flail at the ",
+    ]
+    return f'{random.choice(flail_text)}{enemy.name}'
+
+#
+
+#game encounters
 def encounter1():
     print(f'''
     Walking down the path, you see a large gray donkey in the middle of the road.  It doesn't appear to be interested in moving any time soon.
@@ -54,11 +75,11 @@ def encounter1():
             print('You wait for several hours in the bug-infested reeds.  The donkey does not move')
             continue
         elif choice == 3:
-            print('You scream and hammer at the donkey wildly with your fists.  It looks at you with what appears to be confusion and slowly saunters down the road')
+            print('{flail}.  It looks at you with what appears to be confusion and slowly saunters down the road')
             nextencounter()
-            
 
-
+#testing
+print(flail())
 
 
 
