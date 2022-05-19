@@ -49,16 +49,28 @@ class Encounter:
 def yourchoice():
     return int(input("Your choice: "))
 
-#random logic for skill text goes here
-def flail():
-    flail_text = [
+class Skill:
+    def __init__(self,skillname):
+        self.skillname = skillname
+        self.skilltext = []
+        self.skilloutcomes = []
+
+#skill descriptions
+
+hide = Skill("hide")
+hide.skilltext = "You frantically attempt to hide under the nearest available cover."
+
+flail = Skill("flail")
+flail.skilltext = "You attempt to 'fight' in the only way you know how:  battering the subject wildly with both fists"
+flail.skilloutcomes = [
         "You hammer your fists wildly at the ",
         "You let loose an anguished cry and flail at the ",
         "You raise your hands above your head in a threatening gesture and flail at the ",
     ]
-    return f'{random.choice(flail_text)}{enemy.name}'
 
-#
+disgust = Skill("Disgust")
+disgust.skilltext = "You perform some form of cowardly act involving bodily fluids."
+
 
 #game encounters
 def encounter1():
