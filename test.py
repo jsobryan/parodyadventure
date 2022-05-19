@@ -15,6 +15,8 @@ class Enemy:
         self.name = name
         self.resistances = []
         self.weaknesses = []
+        self.successtext = []
+        self.failtext = []
 
 #skills.  Need to add player choice logic
 skill_list = [
@@ -29,10 +31,12 @@ skill_list = [
 
 #example encounter stats
 p1 = Player("Florbert The Unseemly",20)
-p1.skills = ["Hide","Cower","Disgust"]
-enemy = Enemy("Annoyed Donkey")
-enemy.weaknesses = "Flail"
-enemy.resistances = "Cower"
+p1.skills = ["hide","cower","flail"]
+donkey = Enemy("donkey")
+donkey.successtext = "It looks at you with what appears to be confusion and slowly saunters down the road"
+donkey.failtext = "It tramples you.  You die."
+donkey.resistances = "cower"
+donkey.weaknesses = "flail"
 
 #game mechanics
 class Encounter:
@@ -57,7 +61,7 @@ def flail():
 #
 
 #game encounters
-e1 = Encounter(1)
+def encounter1():
     print(f'''
     Walking down the path, you see a large gray donkey in the middle of the road.  It doesn't appear to be interested in moving any time soon.
 
@@ -78,8 +82,19 @@ e1 = Encounter(1)
             nextencounter()
 
 #testing
-encounter1()
 
+while True:
+    print("\n".join(p1.skills))
+    x = input("What do you do? : ")
+    if x in donkey.weaknesses:
+        print(donkey.successtext)
+        break
+    elif x in donkey.resistances:
+        print(donkey.failtext)
+        break
+    else:
+        print("nothing happens")
+        continue
 
 
 
