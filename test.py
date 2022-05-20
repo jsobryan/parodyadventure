@@ -1,6 +1,16 @@
+
+####
+# BLOOD AND TREMBLING
+# a text-based RPG adventure
+# Text by Jay Brainless 
+# Code written by JayO Brainless with assistance from T. Dierking
+#Copyright 2022
+####
 import random
 import os
 from texts import suffix
+
+
 
 #because f strings don't like backslashes
 newline = '\n'
@@ -22,19 +32,20 @@ class Enemy:
         self.failtext = []
         self.specialfail = []
 
-def enemyencounter(name):
-    while True:
-        print("\n".join(p1.skills))
-        x = input("What do you do? : ")
-        if x in name.weaknesses:
-            print(name.successtext)
-            break
-        elif x in name.resistances:
-            print(name.failtext)
-            break
+class Enemyencounter:
+    def __init__(self,enemy_name):
+        self.enemy = Enemy(enemy_name)
+
+    def handle_attack(self, attack):
+        text = None
+        if attack in self.weaknesses:
+            text = self.successtext
+        elif attack in self.weaknesses:
+            text = self.failtext
         else:
-            print("nothing happens")
-            continue
+            text = 'nothing happens'
+ 
+
 
 #example encounter stats
 p1 = Player("Florbert The Unseemly",20)
@@ -83,21 +94,27 @@ class Encounter:
     def __init__(self,encounternum):
         self.encounternum = encounternum
         self.encountertext = []
+        self.choice1 = []
+        self.choice2 = []
+        self.choice3 = []
+        self.choice4 = []
         
         def encnum(x):
             return f'e{x.encountertext}'
 
-        def choiceloop(*args):
-            while True:
-                x = yourchoice()
-                if x == 1:
-                    print("You mumble an awkward thanks and take the note.  A gout of blood pours out of Scrapdapple's mouth as he attempts to smile.  You turn from the grisly sight and proceed down the path leading out of the village.")
-                    break
-                elif x == 2:
-                    print("Scrapdapple gazes at you with a look of what is initially confusion, and then dawning horror as you unlace your trousers.  He attempts to scream, but his final cries transform into a hideous gargle as you unleash a stream of urine into his bleeding mouth. You make sure that the last sight he sees is you grinding his note into the ground as you walk away.")
-                    break
-                else: 
-                    continue
+            
+        def choice(self,choice):
+            text = None
+            if choice == 1:
+                text = self.choice1
+            elif choice == 2:
+                text = self.choice2
+            elif choice == 3:
+                text = self.choice3
+            elif choice == 4:
+                text == self.choice4
+            if not None:
+                return text
    
 class Skill:
     def __init__(self,skillname):
@@ -184,6 +201,10 @@ If you simply take the note and proceed on the path out of the village, press 1.
 
 If you choose to instead mock the mayor's desperate pleas and piss on his dying face before leaving the village, press 2.
 '''
+e2.choice1 = "You mumble an awkward thanks and take the note.  A gout of blood pours out of Scrapdapple's mouth as he attempts to smile.  You turn from the grisly sight and proceed down the path leading out of the village."
+
+e2.choice2 = "Scrapdapple gazes at you with a look of what is initially confusion, and then dawning horror as you unlace your trousers.  He attempts to scream, but his final cries transform into a hideous gargle as you unleash a stream of urine into his bleeding mouth. You make sure that the last sight he sees is you grinding his note into the ground as you walk away."
+
 
 
 
@@ -191,6 +212,8 @@ e3 = Encounter(3)
 e3.encountertext = f'''
 Walking down the path, you see a large gray donkey in the middle of the road.  It doesn't appear to be interested in moving any time soon.
 '''
+
+
 
 
 
