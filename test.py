@@ -57,6 +57,10 @@ skilllist = [
 ]
 
 # game mechanics
+def playername():
+    name = input("What is your name? ")
+    return name
+
 def yourchoice():
     return int(input("Your choice: "))
 
@@ -80,12 +84,15 @@ class Encounter:
         self.encountertext = []
         nextencounter = encounternum + 1
         prevencounter = encounternum - 1
-
+   
 class Skill:
     def __init__(self,skillname):
         self.skillname = skillname
         self.skilltext = " "
         self.skilloutcomes = []
+
+        def outcome(skillname):
+            return random.choice(skillname.skilloutcomes)
 
 # skill descriptions
 flee = Skill("flee")
@@ -144,10 +151,43 @@ nutpunch.skilloutcomes = [
 ]
 
 # game encounters
-e1 = Encounter(1)
-e1.encountertext = f'''
+e2 = Encounter(1)
+e2.encountertext = f'''
+You wander carefully through the smoking wreckage of your former home.  As you near the outskirts of Florpflump, you are startled by the sounds of a plaintive cry for help.  It appears to be coming from behind a nearby woodpile.
+
+If you choose to investigate, press 1.
+If you choose to ignore the noise and continue down the lane leading out of Florpflump, press 2.
+'''
+x = yourchoice()
+if x == 1:
+    encounter2()
+elif x == 2:
+    encounter3()
+
+e2 = Encounter(2)
+e2.encountertext = f'''
+Creeping closer to the woodpile, you see the battered form of Old Scrapdapple, the village mayor, and your chief tormentor throughout your younger years.  You vividly recall that it was Scrapdapple himself who gave you the moniker {playername}.  He is gravely wounded, and holds out a hastily scrawled note in a charred, bleeding hand.
+
+"Take this, {playername}...  It has vital information that must be passed on... Please...
+
+If you simply take the note and proceed on the path out of the village, press 1.
+
+If you choose to instead mock the mayor's desperate pleas and piss on his dying face before leaving the village, press 2.
+'''
+while True:
+    x = yourchoice()
+    if x == 1:
+        print("You mumble an awkward thanks and take the note.  A gout of blood pours out of Scrapdapple's mouth as he attempts to smile.  You turn from the grisly sight and proceed down the path leading out of the village.")
+    elif x == 2:
+        print("Scrapdapple gazes at you with a look of what is initially confusion, and then dawning horror as you unlace your trousers.  He attempts to scream, but his final cries transform into a hideous gargle as you unleash a stream of urine into his bleeding mouth. You make sure that the last sight he sees is you grinding his note into the ground as you walk away.")
+
+
+e3 = Encounter(3)
+e3.encountertext = f'''
 Walking down the path, you see a large gray donkey in the middle of the road.  It doesn't appear to be interested in moving any time soon.
 '''
+
+
 
 #testing
 
@@ -164,7 +204,7 @@ Walking down the path, you see a large gray donkey in the middle of the road.  I
 #         print("nothing happens")
 #         continue
 
-chooseskills()
+
 
 
 
