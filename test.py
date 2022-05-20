@@ -32,21 +32,6 @@ class Enemy:
         self.failtext = []
         self.specialfail = []
 
-class Enemyencounter:
-    def __init__(self,enemy_name):
-        self.enemy = Enemy(enemy_name)
-
-    def handle_attack(self, attack):
-        text = None
-        if attack in self.weaknesses:
-            text = self.successtext
-        elif attack in self.weaknesses:
-            text = self.failtext
-        else:
-            text = 'nothing happens'
- 
-
-
 #example encounter stats
 p1 = Player("Florbert The Unseemly",20)
 p1.skills = ["hide","cower","flail"]
@@ -93,38 +78,35 @@ def chooseskills():
 class Encounter:
     def __init__(self,encounternum):
         self.encounternum = encounternum
-        self.encountertext = []
-        self.choice1 = []
-        self.choice2 = []
-        self.choice3 = []
-        self.choice4 = []
-        
-        def encnum(x):
-            return f'e{x.encountertext}'
+        self.encountertext = ""
+        self.choices = []
+        self.skillchoices = p1.skills
 
-            
-        def choice(self,choice):
+        def choiceopts(self, choice):
+            choice = self.choices
+        
+        def use_skill(self, use_skill):
             text = None
-            if choice == 1:
-                text = self.choice1
-            elif choice == 2:
-                text = self.choice2
-            elif choice == 3:
-                text = self.choice3
-            elif choice == 4:
-                text == self.choice4
-            if not None:
-                return text
+            if use_skill in self.weaknesses:
+                text = self.successtext
+            elif use_skill in self.weaknesses:
+                text = self.failtext
+            else:
+                text = self.skillname.nope()
+        
+            
    
 class Skill:
     def __init__(self,skillname):
         self.skillname = skillname
         self.skilltext = " "
         self.skilloutcomes = []
+        self.noeffect = []
 
-def outcome(skillname):
-    return random.choice(skillname.skilloutcomes)
-
+    def outcome(skillname):
+        return random.choice(skillname.skilloutcomes)
+    def nope(skillname):
+        return random.choice(skillname.noeffect)
 
 # skill descriptions
 flee = Skill("flee")
@@ -133,6 +115,9 @@ flee.skilltext = "You attempt to run away from the target.  This may result in r
 hide = Skill("hide")
 hide.skilltext = "You frantically attempt to hide under the nearest available cover."
 hide.skilloutcomes = "You"
+hide.noeffect = [
+
+]
 
 flail = Skill("flail")
 flail.skilltext = "You attempt to 'fight' in the only way you know how:  battering the subject wildly with both fists"
@@ -213,6 +198,74 @@ e3.encountertext = f'''
 Walking down the path, you see a large gray donkey in the middle of the road.  It doesn't appear to be interested in moving any time soon.
 '''
 
+e4 = Encounter(4)
+def notecheck():
+    if "crumpled note" in p1.equipment:
+        additionaltext = 'As you ponder which way to go, you remember the note that Scrapdapple gave you.  Although nearly illegible, you manage to make out the words, "treasure" and "grove"'
+        return additionaltext
+    else:
+        pass
+e4.encountertext = f'''
+With the donkey out of the way, you continue to walk down the path.  After some time, you come to a crossroads.  The westward path looks to lead toward a large grove of trees far in the distance.  The Eastward path winds around a large hill.
+
+{notecheck()}
+
+If you take the westward path towards the grove, press 1
+If you take the Eastward path toward the hill, press 2
+If you choose to continue north, press 3
+'''
+
+e5 = Encounter(5)
+e5.encountertext = f'''
+You head westward towards the trees.  The hot afternoon sun beats down upon you as you trod the dusty path into the grove.  Welcoming the shade offered by the trees, you pause and rest upon a nearby log.  Suddenly, you hear a crashing noise behind you, and you turn to find yourself face to face with a large group of Ogres!  They stare at you with wicked amusement as drool drips slowly from their enormous, fanged mouths.
+
+'Well, well, well...  Wot 'ave we 'ere?  One of the Ogres says menacingly.  'a lil' lost lamb all alone in the forest?  It's been a long time since we 'ad lamb for supper!  
+
+They begin to move slowly toward you, brandishing long, jagged knives.
+'''
+def finaljoke():
+    if "crumpled note" in p1.equipment:
+        additionaltext = 'You realize, too late, that Scrapdapple has played one final, cruel joke upon you, and that he must have written the note as he saw you approaching.  There is no treasure here, only your certain doom.'
+        return additionaltext
+    else:
+        pass
+ogre = Enemy("ogre")
+ogre.resistances = ["cower","hide","flee","nutpunch","flail","beg"]
+ogre.weaknesses = ["disgust"]
+
+if e5.use_skill == "cower":
+    ogre.failtext = f'''
+    {cower.outcome} 
+    
+    {finaljoke()} The last thing you hear is the Ogres laughing at your cowardice as they hack you to pieces'''
+elif e5.use_skill == "hide":
+    ogre.failtext = f'''
+    {hide.outcome} 
+    
+    {finaljoke()} Your attempts to hide, however, are futile.  You have survived the massacre of your home only to end up in an Ogre's stewpot.'''
+elif e5.use_skill == "flee":
+    ogre.failtext = f'''
+    {flee.outcome} 
+    
+    {finaljoke()} You manage to duck between the legs of one of the Ogres and desperately run toward the edge of the grove, only to feel a hot flash of pain as long, thick claws dig mercilessly into your back.'''
+elif e5.use_skill == "nutpunch":
+    ogre.failtext = f'''
+    {nutpunch.outcome} 
+    
+    {finaljoke()} The ogres look at you with amusement as your blow goes wide.  The grove rings with their hideous laughter.
+    'Oooh, This'un 'ere's a fiesty one!' One of the Ogres cackles.  'This will be some spicy stew!'
+
+    '''
+elif e5.use_skill == "disgust":
+    ogre.successtext = f'''
+    {finaljoke()}
+
+    {disgust.outcome}
+
+    The Ogres look upon you with disgust and horror.  'Ewwww, this'un's messed 'imself!  The head Ogre shouts.  'By Grokflarp's ragged teats, the smell is awful!  We'll never be able to clean 'im up!  Let's get out of 'ere!
+
+    You breathe a sigh of relief, barely noticing the stench of your own filth as the Ogres tromp away deeper into the woods.
+    '''
 
 
 
