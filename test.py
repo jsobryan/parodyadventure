@@ -8,6 +8,7 @@
 ####
 import random
 import os
+from re import X
 from texts import suffix
 
 
@@ -32,15 +33,9 @@ class Enemy:
         self.failtext = []
         self.specialfail = []
 
-#example encounter stats
-p1 = Player("Florbert The Unseemly",20)
-p1.skills = ["hide","cower","flail"]
-donkey = Enemy("donkey")
-donkey.successtext = "It looks at you with what appears to be confusion and slowly saunters down the road"
-donkey.failtext = "It tramples you.  You die."
-donkey.specialfail = "You punch the donkey's balls with all your might.  It makes a startled cry and kicks you in the head. It then runs away from you down the path.  You may proceed, but lose 4 HP"
-donkey.resistances = "cower"
-donkey.weaknesses = "flail"
+
+
+
 # skills.  Need to add player choice logic
 skilllist = [
     "Hide",
@@ -53,10 +48,12 @@ skilllist = [
 
 # game mechanics
 def name():
-    name = input("What is your name? ")
-    return name
+    x = input("What is your name? ")
+    return x 
+title = name()
+playername = f'{title} the {random.choice(suffix)}'
+p1 = Player(playername,20)
 
-playername = (f'{name} the {random.choice(suffix)}')
 
 def yourchoice():
     return int(input("Your choice: "))
@@ -82,20 +79,27 @@ class Encounter:
         self.choices = []
         self.skillchoices = p1.skills
 
-        def choiceopts(self, choice):
-            choice = self.choices
+    def use_skill(self, skillname):
+        self.use_skill = self.skillname
+        self.skillname = Skill.skillname
+        text = None
+        if skillname in Enemy.weaknesses:
+            text = self.successtext
+        elif skillname in Enemy.weaknesses:
+            text = self.failtext
+        else:
+            text = skillname.nope()
+
+    def choiceopts(self, choice):
+        choice = self.choices
         
-        def use_skill(self, use_skill):
-            text = None
-            if use_skill in self.weaknesses:
-                text = self.successtext
-            elif use_skill in self.weaknesses:
-                text = self.failtext
-            else:
-                text = self.skillname.nope()
-        
-            
-   
+    def runencounter(self, num):
+        num = self.encounternum
+        print(self.encountertext)
+        print(self.skillchoices)
+        x = input('Your choice: ')
+        return use_skill(x)
+
 class Skill:
     def __init__(self,skillname):
         self.skillname = skillname
@@ -107,6 +111,8 @@ class Skill:
         return random.choice(skillname.skilloutcomes)
     def nope(skillname):
         return random.choice(skillname.noeffect)
+
+    
 
 # skill descriptions
 flee = Skill("flee")
@@ -137,7 +143,8 @@ disgust.skilloutcomes = [
     "A fetid, earthy stench surrounds you as you fill your trousers.",
     "You groan weakly as a flood of liquid diarrhea spills down your legs.",
     "Literally sick with fear, you vomit profusely on the feet of the #ENEMYNAME#",
-    "You double over and vomit on the ground at the sight of the #ENEMYNAME#"
+    "You double over and vomit on the ground at the sight of the #ENEMYNAME#",
+    "A sound like tearing paper fills the air as you are wracked with several violent sharts.  Shortly thereafter, a tremendous explosion of watery feces fills your pants."
 ]
 
 beg = Skill("beg")
@@ -233,30 +240,30 @@ ogre = Enemy("ogre")
 ogre.resistances = ["cower","hide","flee","nutpunch","flail","beg"]
 ogre.weaknesses = ["disgust"]
 
-if e5.use_skill == "cower":
+if e5.use_skill(cower):
     ogre.failtext = f'''
     {cower.outcome} 
-    
+
     {finaljoke()} The last thing you hear is the Ogres laughing at your cowardice as they hack you to pieces'''
-elif e5.use_skill == "hide":
+elif hide.use_skill:
     ogre.failtext = f'''
     {hide.outcome} 
-    
+
     {finaljoke()} Your attempts to hide, however, are futile.  You have survived the massacre of your home only to end up in an Ogre's stewpot.'''
-elif e5.use_skill == "flee":
+elif flee.use_skill:
     ogre.failtext = f'''
     {flee.outcome} 
-    
+
     {finaljoke()} You manage to duck between the legs of one of the Ogres and desperately run toward the edge of the grove, only to feel a hot flash of pain as long, thick claws dig mercilessly into your back.'''
-elif e5.use_skill == "nutpunch":
+elif nutpunch.use_skill:
     ogre.failtext = f'''
     {nutpunch.outcome} 
-    
+
     {finaljoke()} The ogres look at you with amusement as your blow goes wide.  The grove rings with their hideous laughter.
     'Oooh, This'un 'ere's a fiesty one!' One of the Ogres cackles.  'This will be some spicy stew!'
 
     '''
-elif e5.use_skill == "disgust":
+elif disgust.use_skill:
     ogre.successtext = f'''
     {finaljoke()}
 
@@ -268,11 +275,17 @@ elif e5.use_skill == "disgust":
     '''
 
 
-
-
+#example encounter stats
+# p1 = Player("Florbert The Unseemly",20)
+p1.skills = ["hide","cower","flail"]
+donkey = Enemy("donkey")
+donkey.successtext = "It looks at you with what appears to be confusion and slowly saunters down the road"
+donkey.failtext = "It tramples you.  You die."
+donkey.specialfail = "You punch the donkey's balls with all your might.  It makes a startled cry and kicks you in the head. It then runs away from you down the path.  You may proceed, but lose 4 HP"
+donkey.resistances = "cower"
+donkey.weaknesses = "flail"
 
 #testing
-
 # while True:
 #     print("\n".join(p1.skills))
 #     x = input("What do you do? : ")
@@ -286,7 +299,7 @@ elif e5.use_skill == "disgust":
 #         print("nothing happens")
 #         continue
 
-
+e5.runencounter
 
 
 
