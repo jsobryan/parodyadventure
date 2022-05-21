@@ -24,6 +24,12 @@ class Player:
         self.gold = 0
         self.skills = []
 
+    def gethp(self):
+        return self.hp
+
+    def sethp(self, newhp):
+        self.health = newhp
+
 class Enemy:
     def __init__(self,name):
         self.name = name
@@ -49,9 +55,10 @@ skilllist = [
 # game mechanics
 def name():
     x = input("What is your name? ")
-    return x 
-title = name()
-playername = f'{title} the {random.choice(suffix)}'
+    return x
+
+def playername():
+    return f'{name()} the {random.choice(suffix)}'
 p1 = Player(playername,20)
 
 
@@ -79,26 +86,23 @@ class Encounter:
         self.choices = []
         self.skillchoices = p1.skills
 
-    def use_skill(self, skillname):
-        self.use_skill = self.skillname
-        self.skillname = Skill.skillname
-        text = None
-        if skillname in Enemy.weaknesses:
-            text = self.successtext
-        elif skillname in Enemy.weaknesses:
-            text = self.failtext
-        else:
-            text = skillname.nope()
+    # def use_skill(self, skillname):
+    #     self.use_skill = self.skillname
+    #     self.skillname = Skill.skillname
+    #     text = None
+    #     if skillname in Enemy.weaknesses:
+    #         text = self.successtext
+    #     elif skillname in Enemy.weaknesses:
+    #         text = self.failtext
+    #     else:
+    #         text = skillname.nope()
 
     def choiceopts(self, choice):
         choice = self.choices
         
-    def runencounter(self, num):
-        num = self.encounternum
+    def runencounter(self):
         print(self.encountertext)
         print(self.skillchoices)
-        x = input('Your choice: ')
-        return use_skill(x)
 
 class Skill:
     def __init__(self,skillname):
@@ -120,7 +124,11 @@ flee.skilltext = "You attempt to run away from the target.  This may result in r
 
 hide = Skill("hide")
 hide.skilltext = "You frantically attempt to hide under the nearest available cover."
-hide.skilloutcomes = "You"
+hide.skilloutcomes = [
+    "Like a small rodent, you desperately attempt to scurry under the nearest available cover.",
+    "Your eyes widen with terror and you scramble for a suitable place to hide.",
+    "In a panicked attempt to conceal yourself, you dive under the nearest available hiding place.",
+]
 hide.noeffect = [
 
 ]
@@ -150,10 +158,10 @@ disgust.skilloutcomes = [
 beg = Skill("beg")
 beg.skilltext = "You get on your knees and pathetically beg for the target not to harm you."
 beg.skilloutcomes = [
-    f"You prostrate yourself before the #ENEMYNAME# and plead for mercy.",
+    "You prostrate yourself before the #ENEMYNAME# and plead for mercy.",
     "You fall upon your knees sobbing, and beg for your life.",
     "Gibbering like a child, you fall upon the ground and beg the #ENEMYNAME#  not to harm you",
-    "'Please, please, please don't hurt me!  You sob pathetically."
+    "'Please, please, please don't hurt me!  You sob pathetically.",
 
 ]
 
@@ -284,6 +292,7 @@ donkey.failtext = "It tramples you.  You die."
 donkey.specialfail = "You punch the donkey's balls with all your might.  It makes a startled cry and kicks you in the head. It then runs away from you down the path.  You may proceed, but lose 4 HP"
 donkey.resistances = "cower"
 donkey.weaknesses = "flail"
+#######
 
 #testing
 # while True:
@@ -299,7 +308,7 @@ donkey.weaknesses = "flail"
 #         print("nothing happens")
 #         continue
 
-e5.runencounter
+
 
 
 
