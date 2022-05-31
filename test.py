@@ -10,6 +10,7 @@ import random
 import os
 from re import X
 from texts import suffix
+from time import sleep
 
 #because f strings don't like backslashes
 newline = '\n'
@@ -17,16 +18,24 @@ newline = '\n'
 class Player:
     def __init__(self,name,hp):
         self.name = name
-        self.hp = hp
-        self.equipment = []
-        self.gold = 0
-        self.skills = []
+        self._gold = 0
+        self._hp = 20
+    
+    @property
+    def hp(self):
+       return self._hp
 
-    def gethp(self):
-        return self.hp
+    @hp.setter
+    def hpset(self, value):
+       self._hp = value
 
-    def sethp(self, newhp):
-        self.health = newhp
+    @property
+    def gold(self):
+       return self._gold
+
+    @gold.setter
+    def goldset(self, value):
+       self._gold = value
 
     def getgold(self):
         return self.gold
@@ -73,9 +82,7 @@ def playername():
     return f'{name()} the {random.choice(suffix)}'
 p1 = Player(playername,20)
 p1.skills = ["hide","cower","flail","nutpunch"]
-
-def yourchoice():
-    return int(input("Your choice: "))
+###REPLACE PREDEFINIED SKILLS WITH SKILLCHOICE BELOW
 
 def chooseskills():
     while len(p1.skills) <= 3:
@@ -91,12 +98,19 @@ def chooseskills():
             print('Not a valid response')
             continue
 
+
+#ENCOUNTER LOGIC - NEED TO GET THS WORKING BEFORE FINIISHINIG STORY
 class Encounter:
     def __init__(self,encounternum):
         self.encounternum = encounternum
         self.encountertext = ""
-        self.choices = []
+        # self.choices = []
         self.skillchoices = p1.getskills()
+        
+    @property
+    def choices(self):
+        choice = int(input("Your choice?: "))
+        self.choices[choice]
     
     # def use_skill(self, skillname):
     #     self.use_skill = self.skillname
@@ -107,27 +121,19 @@ class Encounter:
     #     elif skillname in Enemy.weaknesses:
     #         text = self.failtext
     #     else:
-    #         text = skillname.nope()
-
-    def choice(self, x,y):
-        response = int(input("Your choice: "))
-        if response == 1:
-            self.runencounter(x)
-        elif response == 2:
-            self.runencounter(y)    
-        
-    def runencounter(self,enemy):
-        @property
-        def choices(self):
-            choice = int(input("Your choice?: "))
-            self.choices[choice]
+    #         text = skillname.nope()  
+    def combat_encounter(self,enemy):
         print(self.encountertext)
-        print(f'Your Skills: {self.skillchoices}')
-        answer = input("Your Choice: ")
-        if answer in p1.skills:
-            answer.useon(enemy)
+        print(f'Your Skills: {self.skillchoices}{newline}')
+        answer = input("Which skill do you wish to use? ")
+        for skill in p1.skills:
+            if skill.skillname == answer:
+                skill.useon(enemy)
+                break
+            else:
+                print("You do not possess that skill!")
 
-
+#SKILL LOGIC
 class Skill:
     def __init__(self,skillname):
         self.skillname = skillname
@@ -141,6 +147,8 @@ class Skill:
         return text
     
     def useon(self,enemy):
+        print(f'{self.use(enemy)}{newline}')
+        sleep(3)
         text = None
         if self.skillname in enemy.weaknesses:
             text = enemy.successtext
@@ -155,7 +163,7 @@ class Skill:
     def nope(self):
         return random.choice(self.noeffect)
 
-# skill descriptions
+# SKILL DESCRIPTIONS
 flee = Skill("flee")
 flee.skilltext = "You attempt to run away from the target.  This may result in returning to the previous encounter."
 
@@ -219,7 +227,7 @@ nutpunch.skilloutcomes = [
     "Seeing an opportunity to fight as dirty as possible, you throw a punch aimed at the target's genitals."
 ]
 
-# game encounters
+# GAME ENCOUNTERS
 e1 = Encounter(1)
 e1.encountertext = f'''
 You wander carefully through the smoking wreckage of your former home.  As you near the outskirts of Florpflump, you are startled by the sounds of a plaintive cry for help.  It appears to be coming from behind a nearby woodpile.
@@ -229,8 +237,6 @@ If you choose to investigate, press 1.
 
 If you choose to ignore the noise and continue down the lane leading out of Florpflump, press 2.
 '''
-
-
 
 e2 = Encounter(2)
 e2.encountertext = f'''
@@ -245,9 +251,6 @@ If you choose to instead mock the mayor's desperate pleas and piss on his dying 
 e2.choice1 = "You mumble an awkward thanks and take the note.  A gout of blood pours out of Scrapdapple's mouth as he attempts to smile.  You turn from the grisly sight and proceed down the path leading out of the village."
 
 e2.choice2 = "Scrapdapple gazes at you with a look of what is initially confusion, and then dawning horror as you unlace your trousers.  He attempts to scream, but his final cries transform into a hideous gargle as you unleash a stream of urine into his bleeding mouth. You make sure that the last sight he sees is you grinding his note into the ground as you walk away."
-
-
-
 
 e3 = Encounter(3)
 e3.encountertext = f'''
@@ -341,11 +344,11 @@ You make your way down the path towards the hill, you notice a figure in the dis
 # flee - 'you run screaming from the sight of the old beggar man.'
 
 
-###
+### TEST ENCOUNTER STATS
 
 donkey = Enemy("donkey")
 donkey.failskill = nutpunch
-donkey.successtext = "It looks at you with what appears to be confusion and slowly saunters down the road"
+donkey.successtext = "The donkey looks at you with what appears to be confusion and slowly saunters down the road"
 donkey.failtext = "It tramples you.  You die."
 donkey.specialfail = "You punch the donkey's balls with all your might.  It makes a startled cry and kicks you in the head. It then runs away from you down the path.  You may proceed, but lose 4 HP"
 donkey.resistances = "cower"
@@ -353,7 +356,5 @@ donkey.weaknesses = "flail"
 
 #######
 
-#testing
-e3.runencounter(donkey)
-
-
+#TESTING AREA
+print(nutpunch.useon(donkey))
