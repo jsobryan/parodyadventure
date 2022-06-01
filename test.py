@@ -15,6 +15,7 @@ from time import sleep
 #because f strings don't like backslashes
 newline = '\n'
 #player / enemy stats
+
 class Player:
     def __init__(self,name,hp):
         self.name = name
@@ -37,21 +38,11 @@ class Player:
     def goldset(self, value):
        self._gold = value
 
-    def getgold(self):
-        return self.gold
-
-    def setgold(self, newgold):
-        self.gold = newgold
-
     def equipment(self):
         return self.equipment
 
     def equipment(self, newequip):
         self.equipment = newequip
-
-    def getskills(self):
-        text = ", ".join(self.skills)
-        return text
 
 class Enemy:
     def __init__(self,name):
@@ -62,8 +53,10 @@ class Enemy:
         self.failtext = []
         self.failskill = []
         self.specialfail = []
+
         
 # skills.  Need to add player choice logic
+
 skilllist = [
     "Hide",
     "Flee",
@@ -81,22 +74,22 @@ def name():
 def playername():
     return f'{name()} the {random.choice(suffix)}'
 p1 = Player(playername,20)
-p1.skills = ["hide","cower","flail","nutpunch"]
+
 ###REPLACE PREDEFINIED SKILLS WITH SKILLCHOICE BELOW
 
-def chooseskills():
-    while len(p1.skills) <= 3:
-        for index, value in enumerate(skilllist, start=1):
-            print(f'{index}: {value}')
-        choice = input("Choose 3 Skills (press k for skill descriptions): ")
-        if choice.lower() == 'k':
-            for item in skilllist:
-                print(f'{item}: {item.skilltext}')
-        elif choice in skilllist:
-            p1.skills.append(skilllist.pop(skilllist.index(choice-1)))
-        else:
-            print('Not a valid response')
-            continue
+# def chooseskills():
+#     while len(p1.skills) <= 3:
+#         for index, value in enumerate(skilllist, start=1):
+#             print(f'{index}: {value}')
+#         choice = input("Choose 3 Skills (press k for skill descriptions): ")
+#         if choice.lower() == 'k':
+#             for item in skilllist:
+#                 print(f'{item}: {item.skilltext}')
+#         elif choice in skills.skillname:
+#             p1.skills.append(skilllist.pop(skilllist.index(choice-1)))
+#         else:
+#             print('Not a valid response')
+#             continue
 
 
 #ENCOUNTER LOGIC - NEED TO GET THS WORKING BEFORE FINIISHINIG STORY
@@ -104,34 +97,23 @@ class Encounter:
     def __init__(self,encounternum):
         self.encounternum = encounternum
         self.encountertext = ""
-        # self.choices = []
-        self.skillchoices = p1.getskills()
         
     @property
     def choices(self):
         choice = int(input("Your choice?: "))
         self.choices[choice]
     
-    # def use_skill(self, skillname):
-    #     self.use_skill = self.skillname
-    #     self.skillname = Skill.skillname
-    #     text = None
-    #     if skillname in Enemy.weaknesses:
-    #         text = self.successtext
-    #     elif skillname in Enemy.weaknesses:
-    #         text = self.failtext
-    #     else:
-    #         text = skillname.nope()  
+
     def combat_encounter(self,enemy):
         print(self.encountertext)
-        print(f'Your Skills: {self.skillchoices}{newline}')
-        answer = input("Which skill do you wish to use? ")
+        print("Your Skills: ",end=" ")
+        for skname in p1.skills:
+            print(skname.skillname,end=" ")
+        answer = input(f'{newline * 2}Which skill do you wish to use? ')
         for skill in p1.skills:
             if skill.skillname == answer:
                 skill.useon(enemy)
                 break
-            else:
-                print("You do not possess that skill!")
 
 #SKILL LOGIC
 class Skill:
@@ -141,29 +123,31 @@ class Skill:
         self.skilloutcomes = []
         self.noeffects = []
 
+    def nope(self):
+        return random.choice(self.noeffects)
+
     def use(self,enemy):
         self.enemy = enemy
         text = random.choice(self.skilloutcomes)
         return text
-    
+
+ 
     def useon(self,enemy):
-        print(f'{self.use(enemy)}{newline}')
+        print(f'{newline}{self.use(enemy)}{newline}')
         sleep(3)
         text = None
         if self.skillname in enemy.weaknesses:
             text = enemy.successtext
         elif self.skillname in enemy.resistances:
             text = enemy.failtext
-        elif self.skillname in enemy.specialfail:
-            text = enemy.specialfail
         else:
-            text = self.noeffects
-        return text
+            text = self.nope()
+        print(text)
         
-    def nope(self):
-        return random.choice(self.noeffect)
+
 
 # SKILL DESCRIPTIONS
+
 flee = Skill("flee")
 flee.skilltext = "You attempt to run away from the target.  This may result in returning to the previous encounter."
 
@@ -175,7 +159,8 @@ hide.skilloutcomes = [
     "In a panicked attempt to conceal yourself, you dive under the nearest available hiding place.",
 ]
 hide.noeffects = [
-
+    "Your attempts to conceal yourself prove ineffectual.",
+    "Despite your best efforts to hide in fear of the "
 ]
 
 flail = Skill("flail")
@@ -184,7 +169,7 @@ flail.skilloutcomes = [
         "You hammer your fists wildly at the ",
         "You let loose an anguished cry and flail at the ",
         "You raise your hands above your head in a threatening gesture and flail at the ",
-        "You screech like an enraged child and aggressively thump your balled fists against the {enemy.name}",
+        "You screech like an enraged child and aggressively thump your balled fists against the {ename}",
         "Making a noise that bears an uncanny resemblance to a broken teakettle, you lash out wildly with your fists."
     ]
 
@@ -292,7 +277,7 @@ Walking down the path, you see a large gray donkey in the middle of the road.  I
 # ogre.resistances = ["cower","hide","flee","nutpunch","flail","beg"]
 # ogre.weaknesses = ["disgust"]
 
-# if e5.use_skill(cower):
+# if useon.skillname == cower:
 #     ogre.failtext = f'''
 #     {cower.outcome} 
 
@@ -345,16 +330,22 @@ You make your way down the path towards the hill, you notice a figure in the dis
 
 
 ### TEST ENCOUNTER STATS
-
+p1.skills = [hide,disgust,nutpunch,cower,flee,flail,beg]
 donkey = Enemy("donkey")
-donkey.failskill = nutpunch
 donkey.successtext = "The donkey looks at you with what appears to be confusion and slowly saunters down the road"
-donkey.failtext = "It tramples you.  You die."
-donkey.specialfail = "You punch the donkey's balls with all your might.  It makes a startled cry and kicks you in the head. It then runs away from you down the path.  You may proceed, but lose 4 HP"
-donkey.resistances = "cower"
+donkey.failtext = "You punch the donkey's balls with all your might.  It makes a startled cry and kicks you in the head. It then runs away from you down the path.  You may proceed, but lose 4 HP"
+donkey.resistances = "nutpunch"
 donkey.weaknesses = "flail"
+
+beggar = Enemy("beggar")
+beggar.successtext = f'The old man looks at you with puzzlement and then chuckles heartily.  "umm, here, take this, looks like you need it more than me."{newline *2} You have gained 2 gold.'
+beggar.failtext = "The old beggar stumbles back with a startled look and falls flat on his back.  You proceed, confident that you have vanquished what was certainly a dangerous foe."
+beggar.resistances = "nutpunch","flail"
+beggar.weaknesses = "disgust","cower","hide","beg"
 
 #######
 
 #TESTING AREA
-print(nutpunch.useon(donkey))
+# print(nutpunch.useon(donkey))
+e3.combat_encounter(donkey)
+
