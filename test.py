@@ -143,7 +143,7 @@ class Skill:
         else:
             text = self.nope()
         print(text)
-        
+        #I miss you and I never stopped loving you
 
 
 # SKILL DESCRIPTIONS
@@ -312,22 +312,12 @@ Walking down the path, you see a large gray donkey in the middle of the road.  I
 #     '''
 
 
-#example encounter stats
-# p1 = Player("Florbert The Unseemly",20)
-
 e6 = Encounter(6)
 e6.encountertext = '''
 You make your way down the path towards the hill, you notice a figure in the distance, apparently walking the same direction you are going. As you approach the foot of the hill, you realize it is and old beggar-man with a large knapsack.  He holds a hand out and asks,
 
 'Hello, fellow traveler, care to spare a penny for an old man?'
 '''
-###
-# flail or nutpunch - "The old beggar stumbles back with a startled look and falls flat on his back.  You proceed, confident that you have vanquished what was certainly a dangerous foe."
-
-# hide / cower / disgust - "The old man looks at you with puzzlement and then chuckles heartily.  'umm, here, take this, looks like you need it more than me."
-
-# flee - 'you run screaming from the sight of the old beggar man.'
-
 
 ### TEST ENCOUNTER STATS
 p1.skills = [hide,disgust,nutpunch,cower,flee,flail,beg]
